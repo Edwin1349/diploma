@@ -10,9 +10,12 @@ def load_classificator(path):
     model = torch.load(path)
     model.eval()
 
-    image_BGR = cv2.imread('C:/Users/Orest/Documents/BCW/code/python/jojo.png')
-    image_BGR = val_transform(image_BGR)
-    outputs = model(image_BGR[None, ...].to(device))
+    try:
+        image_BGR = cv2.imread('C:/Users/Orest/Documents/BCW/code/python/jojo1.png')
+        image_BGR = val_transform(image_BGR)
+        outputs = model(image_BGR[None, ...].to(device))
+    except:
+        pass
 
     return model
 
@@ -40,8 +43,6 @@ def draw(frame, boxes):
 def run(path, classifier, detector):
     with open('classes.names') as f:
         labels = [line.strip() for line in f]
-
-    colours = np.random.randint(0, 255, size=(len(labels), 3), dtype='uint8')
 
     fvs = FileVideoStream(path).start()
     time.sleep(1.0)
@@ -76,7 +77,7 @@ def run(path, classifier, detector):
                     continue
 
         draw(frame, boxes)
-        fvs.write(frame)
+        #fvs.write(frame)
 
         if cv2.waitKey(1) == ord('q'):
             break
@@ -107,5 +108,5 @@ if __name__ == "__main__":
         run(sys.argv[1], classifier, detector)
     else:
         print(sys.argv[0])
-        run("C:\\Users\\Orest\\Documents\\BCW\\test_video3.mp4", classifier, detector)
+        run("C:\\Users\\Orest\\Documents\\BCW\\test_video.mp4", classifier, detector)
 
